@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    networks: 
+      - sql
+    container_name: sql_postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  
+  pgadmin:
+    networks:
+      - sql
+    container_name: sql_pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGA_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGA_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - 127.0.0.1:5050:80
+    depends_on:
+      - postgres
+    volumes: 
+      - pgadmin:/var/www/go/docker-volumes/pgadmin
+
+networks:
+  sql:
+
+volumes:
+  pgdata: 
+  pgadmin:
