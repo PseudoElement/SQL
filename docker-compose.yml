@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    networks: 
+    networks:
       - sql
     container_name: sql_postgres
     image: postgres:latest
@@ -13,8 +13,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
-  
+      - "5433:5432"
+
   pgadmin:
     networks:
       - sql
@@ -28,12 +28,14 @@ services:
       - 127.0.0.1:5050:80
     depends_on:
       - postgres
-    volumes: 
+    volumes:
       - pgadmin:/var/www/go/docker-volumes/pgadmin
+      - ./.ssh/cairo_postgres_db_key.txt:/home/pgadmin/ssh-keys/cairo_postgres_db_key
+      - ./.ssh/cairo_postgres_db_key.pub.txt:/home/pgadmin/ssh-keys/cairo_postgres_db_key.pub
 
 networks:
   sql:
 
 volumes:
-  pgdata: 
+  pgdata:
   pgadmin:
